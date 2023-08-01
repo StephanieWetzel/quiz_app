@@ -1,0 +1,23 @@
+body {
+    background-color: #FEFAEF !important;
+}
+
+.container {
+    min-height: 100vh;
+    background-color: #FEFAEF !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quiz-card {
+    width: 30rem;
+}
+
+.question-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+    padding-top: 16px;
+}
