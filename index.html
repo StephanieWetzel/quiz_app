@@ -16,7 +16,7 @@
         crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body onload="init">
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
             <span class="navbar-brand mb-0 h1">Quiz App</span>
@@ -55,7 +55,7 @@
 
                 <div class="question-footer">
                     <span>
-                        <b>1</b> von <b>8</b> Fragen
+                        <b>1</b> von <b id="questions-length">8</b> Fragen
                     </span>
 
                     <button type="button" class="btn btn-warning">Nächste Frage</button>
