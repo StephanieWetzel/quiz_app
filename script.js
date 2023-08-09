@@ -67,3 +67,37 @@ let questions = [
 ];
 
 
+let currentQuestion = 0; // aktuelle Frage = 0
+
+
+function init() {
+    document.getElementById('questions-length').innerHTML = questions.length; // ersetzt die "8" in "1 von 8" mit einem dynamischen Wert (8 ist somit nicht mehr fix, sondern wird automatisch angepasst und entspricht der Gesamtlänge des Arrays)
+    showQuestion();
+}
+
+
+function showQuestion() {
+    let question = questions[currentQuestion]; // das aktuelle JSON (0) wird einer Variable zugewiesen - damit greifen wir nun immer darauf zu
+    // der Inhalt unseres HTML wird mit den Werten aus dem JSON ersetzt:
+    document.getElementById('question').innerHTML = question['question'];
+    document.getElementById('answer_1').innerHTML = question['answer_1'];
+    document.getElementById('answer_2').innerHTML = question['answer_2'];
+    document.getElementById('answer_3').innerHTML = question['answer_3'];
+    document.getElementById('answer_4').innerHTML = question['answer_4'];
+}
+
+
+function answer(selection) {
+    let question = questions[currentQuestion]; // s. Funktion zuvor
+    let selectedAnswerNumber = selection.slice(-1); // vom jeweiligen Parameter wird die letzte Stelle "abgeschnitten" und ausgegeben - in diesem Fall immer die jeweilige Zahl (answer_1/2/3 usw.) - und das packen wir in die Variable "selectedAnswerNumber"
+    let idOfRightAnswer = `answer_${question['right_answer']}`; // wir holen uns die id der richtigen Antwort und machen diese dynamisch, damit immer auf die jeweils richtige Antwort zugegriffen wird - in diesem Fall '3'
+
+    if (selectedAnswerNumber == question['right_answer']) { // jetzt können wir vergleichen, ob der angeklickte Parameter (die Antwort) mit der Stelle aus dem JSON (also die richtige Antwort) übereinstimmt
+        document.getElementById(selection).parentNode.classList.add('bg-success'); // als ID können wir hier "selection" nehmen, da diese Variable genauso heißt, wie unsere ID (in diesem Fall answer_3) / mit "parentNode" greifen wir auf den übergeordneten Container zu und fügen die Klasse dort hinzu.
+    } else {
+        document.getElementById(selection).parentNode.classList.add('bg-danger');
+        document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
+    }
+
+    document.getElementById('next-button').disabled = false;
+}

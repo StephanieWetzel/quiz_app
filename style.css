@@ -21,3 +21,13 @@ body {
     border-top: 1px solid rgba(0, 0, 0, 0.4);
     padding-top: 16px;
 }
+
+.card-bg:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.bg-success,
+.bg-danger {
+    color: white !important;
+}
