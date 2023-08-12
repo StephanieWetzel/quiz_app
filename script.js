@@ -60,7 +60,7 @@ let questions = [
         "question": "Ein Easter Egg bedeutet...?",
         "answer_1": "Frohe Ostern!",
         "answer_2": "Mahlzeit!",
-        "answer_3": "",
+        "answer_3": "Fröhliche Weihnachten!",
         "answer_4": "Überraschung!",
         "right_answer": 4
     }
@@ -77,13 +77,19 @@ function init() {
 
 
 function showQuestion() {
-    let question = questions[currentQuestion]; // das aktuelle JSON (0) wird einer Variable zugewiesen - damit greifen wir nun immer darauf zu
-    // der Inhalt unseres HTML wird mit den Werten aus dem JSON ersetzt:
-    document.getElementById('question').innerHTML = question['question'];
-    document.getElementById('answer_1').innerHTML = question['answer_1'];
-    document.getElementById('answer_2').innerHTML = question['answer_2'];
-    document.getElementById('answer_3').innerHTML = question['answer_3'];
-    document.getElementById('answer_4').innerHTML = question['answer_4'];
+    if (currentQuestion < questions.length) {
+        let question = questions[currentQuestion]; // das aktuelle JSON (0) wird einer Variable zugewiesen - damit greifen wir nun immer darauf zu
+        document.getElementById('current-question').innerHTML = currentQuestion + 1; // die Zahl (aktuelle Frage) wird immer um 1 erhöht / + 1 ist nötig, da wir immer bei 0 anfangen zu zählen (sonst würde Frage 0 von 8 angezeigt werden)
+        // der Inhalt unseres HTML wird mit den Werten aus dem JSON ersetzt:
+        document.getElementById('question').innerHTML = question['question'];
+        document.getElementById('answer_1').innerHTML = question['answer_1'];
+        document.getElementById('answer_2').innerHTML = question['answer_2'];
+        document.getElementById('answer_3').innerHTML = question['answer_3'];
+        document.getElementById('answer_4').innerHTML = question['answer_4'];
+    } else {
+        document.getElementById('end-screen').style = '';
+        document.getElementById('play-screen').style = 'display: none';
+    }
 }
 
 
@@ -94,10 +100,29 @@ function answer(selection) {
 
     if (selectedAnswerNumber == question['right_answer']) { // jetzt können wir vergleichen, ob der angeklickte Parameter (die Antwort) mit der Stelle aus dem JSON (also die richtige Antwort) übereinstimmt
         document.getElementById(selection).parentNode.classList.add('bg-success'); // als ID können wir hier "selection" nehmen, da diese Variable genauso heißt, wie unsere ID (in diesem Fall answer_3) / mit "parentNode" greifen wir auf den übergeordneten Container zu und fügen die Klasse dort hinzu.
-    } else {
+    } else { // wenn die angeklickte Antwort nicht korrekt ist, soll die richtige Antwort zusammen mit der angeklickten (falschen) angezeigt werden
         document.getElementById(selection).parentNode.classList.add('bg-danger');
         document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
     }
+    document.getElementById('next-button').disabled = false; // der Button wird aktiviert (anklickbar)
+}
 
-    document.getElementById('next-button').disabled = false;
+
+function nextQuestion() {
+    currentQuestion++; // Variable wird immer um 1 erhöht -> z. B. von 0 auf 1 im JSON Array und es wird die nächste Frage angezeigt
+    document.getElementById('next-button').disabled = true; // der Button wird deaktiviert
+    resetAnswerButtons();
+    showQuestion(); // nächste Frage wird geladen
+}
+
+
+function resetAnswerButtons() { // die Hintergrundfarbe (grün o. rot o. beides) der Antworten wird entfernt
+    document.getElementById('answer_1').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_1').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-success');
 }
