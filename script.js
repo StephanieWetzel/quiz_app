@@ -56,7 +56,6 @@ let questions = [
         "right_answer": 3
     },
     {
-        // Hier noch eine Antwort ausdenken
         "question": "Ein Easter Egg bedeutet...?",
         "answer_1": "Frohe Ostern!",
         "answer_2": "Mahlzeit!",
@@ -67,6 +66,7 @@ let questions = [
 ];
 
 
+let rightQuestions = 0; // Anzahl richtig beantworteter Fragen
 let currentQuestion = 0; // aktuelle Frage = 0
 
 
@@ -86,9 +86,12 @@ function showQuestion() {
         document.getElementById('answer_2').innerHTML = question['answer_2'];
         document.getElementById('answer_3').innerHTML = question['answer_3'];
         document.getElementById('answer_4').innerHTML = question['answer_4'];
-    } else {
+    } else { // verhindert, dass das Spiel nach der letzten Frage weitergeht (Spielscreen wird ausgeblendet, Endscreen wird angezeigt)
         document.getElementById('end-screen').style = '';
         document.getElementById('play-screen').style = 'display: none';
+        document.getElementById('brain-img').style = 'display: none';
+        document.getElementById('all-questions').innerHTML = questions.length;
+        document.getElementById('amount-of-right-questions').innerHTML = rightQuestions;
     }
 }
 
@@ -100,6 +103,7 @@ function answer(selection) {
 
     if (selectedAnswerNumber == question['right_answer']) { // jetzt können wir vergleichen, ob der angeklickte Parameter (die Antwort) mit der Stelle aus dem JSON (also die richtige Antwort) übereinstimmt
         document.getElementById(selection).parentNode.classList.add('bg-success'); // als ID können wir hier "selection" nehmen, da diese Variable genauso heißt, wie unsere ID (in diesem Fall answer_3) / mit "parentNode" greifen wir auf den übergeordneten Container zu und fügen die Klasse dort hinzu.
+        rightQuestions++;
     } else { // wenn die angeklickte Antwort nicht korrekt ist, soll die richtige Antwort zusammen mit der angeklickten (falschen) angezeigt werden
         document.getElementById(selection).parentNode.classList.add('bg-danger');
         document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');

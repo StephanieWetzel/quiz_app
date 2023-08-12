@@ -25,10 +25,15 @@
 
     <div class="container">
         <div class="card quiz-card">
-            <img src="./img/brainbg.jpg" class="card-img-top">
+            <img src="./img/brainbg.jpg" class="card-img-top" id="brain-img">
 
             <div class="card-body" id="end-screen" style="display: none;">
-                Quiz beendet!
+                <div><img src="./img/brain result.png" alt=""></div>
+
+                <div>Quiz beendet!</div>
+
+                <div>Du hast <b id="amount-of-right-questions">xxx</b> Fragen von <b id="all-questions">xxx</b> Fragen
+                    richtig beantwortet.</div>
             </div>
 
             <div class="card-body" id="play-screen">
