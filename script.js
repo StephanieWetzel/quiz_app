@@ -78,6 +78,12 @@ function init() {
 
 function showQuestion() {
     if (currentQuestion < questions.length) {
+        // Fortschrittsbalken:
+        let percent = currentQuestion / questions.length; // aktuelle Frage durch Anzahl aller Fragen ergibt den aktuellen Fortschritt / das + 1 ist nötig, da wir immer bei 0 anfangen zu zählen und wir sonst nie 100% erreichen würden (da nur bis 7 gezählt wird)
+        percent = Math.round(percent * 100); // mit Math.round wird gerundet, durch * 100 wird aus 0,01 dann 1%
+        document.getElementById('progress-bar').innerHTML = `${percent} %`;
+        document.getElementById('progress-bar').style.width = `${percent}%`; // die Breite der progress-bar wird mit jedem Fortschritt geändert
+
         let question = questions[currentQuestion]; // das aktuelle JSON (0) wird einer Variable zugewiesen - damit greifen wir nun immer darauf zu
         document.getElementById('current-question').innerHTML = currentQuestion + 1; // die Zahl (aktuelle Frage) wird immer um 1 erhöht / + 1 ist nötig, da wir immer bei 0 anfangen zu zählen (sonst würde Frage 0 von 8 angezeigt werden)
         // der Inhalt unseres HTML wird mit den Werten aus dem JSON ersetzt:
@@ -87,11 +93,14 @@ function showQuestion() {
         document.getElementById('answer_3').innerHTML = question['answer_3'];
         document.getElementById('answer_4').innerHTML = question['answer_4'];
     } else { // verhindert, dass das Spiel nach der letzten Frage weitergeht (Spielscreen wird ausgeblendet, Endscreen wird angezeigt)
-        document.getElementById('end-screen').style = '';
+        document.getElementById('end-screen').style = ''; // display: none wird entfernt = der Endscreen wird angezeigt
         document.getElementById('play-screen').style = 'display: none';
-        document.getElementById('brain-img').style = 'display: none';
         document.getElementById('all-questions').innerHTML = questions.length;
         document.getElementById('amount-of-right-questions').innerHTML = rightQuestions;
+        document.getElementById('header-img').src = './img/epicgamer.jpg';
+        // Fortschrittsbar wird am Ende auf 100% Breite gesetzt:
+        document.getElementById('progress-bar').innerHTML = '100 %';
+        document.getElementById('progress-bar').style.width = '100%';
     }
 }
 
@@ -103,7 +112,7 @@ function answer(selection) {
 
     if (selectedAnswerNumber == question['right_answer']) { // jetzt können wir vergleichen, ob der angeklickte Parameter (die Antwort) mit der Stelle aus dem JSON (also die richtige Antwort) übereinstimmt
         document.getElementById(selection).parentNode.classList.add('bg-success'); // als ID können wir hier "selection" nehmen, da diese Variable genauso heißt, wie unsere ID (in diesem Fall answer_3) / mit "parentNode" greifen wir auf den übergeordneten Container zu und fügen die Klasse dort hinzu.
-        rightQuestions++;
+        rightQuestions++; // Anzahl richtiger Fragen wird immer um 1 erhöht
     } else { // wenn die angeklickte Antwort nicht korrekt ist, soll die richtige Antwort zusammen mit der angeklickten (falschen) angezeigt werden
         document.getElementById(selection).parentNode.classList.add('bg-danger');
         document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');

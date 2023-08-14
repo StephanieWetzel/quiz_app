@@ -1,10 +1,12 @@
 body {
-    background-color: #FEFAEF !important;
+    background-image: url(./img/keyboard.jpg);
+    background-size: cover;
+    background-position: center;
+    background-color: black !important;
 }
 
 .container {
     min-height: 100vh;
-    background-color: #FEFAEF !important;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,4 +32,13 @@ body {
 .bg-success,
 .bg-danger {
     color: white !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.final-headline {
+    font-size: 32px;
+    margin-bottom: 16px
 }
