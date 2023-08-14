@@ -139,3 +139,13 @@ function resetAnswerButtons() { // die Hintergrundfarbe (grün o. rot o. beides)
     document.getElementById('answer_4').parentNode.classList.remove('bg-danger');
     document.getElementById('answer_4').parentNode.classList.remove('bg-success');
 }
+
+
+function restartGame() {
+    document.getElementById('header-img').src = './img/playscreen1.jpg';
+    document.getElementById('end-screen').style = 'display: none';
+    document.getElementById('play-screen').style = '';
+    rightQuestions = 0;
+    currentQuestion = 0;
+    init();
+}
