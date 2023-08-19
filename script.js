@@ -1,6 +1,6 @@
 let questions = [
     {
-        "question": "Was bedeutet FPS?",
+        "question": "Was bedeutet fps?",
         "answer_1": "free pocket space",
         "answer_2": "for permanent static",
         "answer_3": "frames per second",
@@ -32,11 +32,11 @@ let questions = [
         "right_answer": 4
     },
     {
-        "question": "Die Abkürzung GG steht für...?",
-        "answer_1": "Good Game",
-        "answer_2": "Good God",
-        "answer_3": "Good Gear",
-        "answer_4": "Good Grace",
+        "question": "Die Abkürzung gg steht für...?",
+        "answer_1": "good game",
+        "answer_2": "good god",
+        "answer_3": "good gear",
+        "answer_4": "good grace",
         "right_answer": 1
     },
     {
@@ -51,7 +51,7 @@ let questions = [
         "question": "Was macht ein Camper?",
         "answer_1": "Die Natur genießen.",
         "answer_2": "Ein Zelt aufschlagen.",
-        "answer_3": "Abwarten und Tee trinken.",
+        "answer_3": "Abwarten (und Tee trinken.)",
         "answer_4": "Lagerfeuerlieder singen.",
         "right_answer": 3
     },
@@ -65,86 +65,137 @@ let questions = [
     }
 ];
 
-
-let rightQuestions = 0; // Anzahl richtig beantworteter Fragen
-let currentQuestion = 0; // aktuelle Frage = 0
+let answerSelected = false;
+let rightQuestions = 0;
+let currentQuestion = 0;
+let AUDIO_SUCCESS = new Audio('audio/success.mp3');
+let AUDIO_FAILURE = new Audio('audio/failure.mp3');
 
 
 function init() {
-    document.getElementById('questions-length').innerHTML = questions.length; // ersetzt die "8" in "1 von 8" mit einem dynamischen Wert (8 ist somit nicht mehr fix, sondern wird automatisch angepasst und entspricht der Gesamtlänge des Arrays)
+    document.getElementById('questions-length').innerHTML = questions.length;
     showQuestion();
 }
 
 
-function showQuestion() {
-    if (currentQuestion < questions.length) {
-        // Fortschrittsbalken:
-        let percent = currentQuestion / questions.length; // aktuelle Frage durch Anzahl aller Fragen ergibt den aktuellen Fortschritt / das + 1 ist nötig, da wir immer bei 0 anfangen zu zählen und wir sonst nie 100% erreichen würden (da nur bis 7 gezählt wird)
-        percent = Math.round(percent * 100); // mit Math.round wird gerundet, durch * 100 wird aus 0,01 dann 1%
-        document.getElementById('progress-bar').innerHTML = `${percent} %`;
-        document.getElementById('progress-bar').style.width = `${percent}%`; // die Breite der progress-bar wird mit jedem Fortschritt geändert
+function startGame() {
+    document.getElementById('play-screen').style = '';
+    document.getElementById('start-screen').style = 'display: none';
+    document.getElementById('header-img').src = './img/playscreen.jpg';
+    document.getElementById('progress').style = ''; // progress-bar becomes visible
+}
 
-        let question = questions[currentQuestion]; // das aktuelle JSON (0) wird einer Variable zugewiesen - damit greifen wir nun immer darauf zu
-        document.getElementById('current-question').innerHTML = currentQuestion + 1; // die Zahl (aktuelle Frage) wird immer um 1 erhöht / + 1 ist nötig, da wir immer bei 0 anfangen zu zählen (sonst würde Frage 0 von 8 angezeigt werden)
-        // der Inhalt unseres HTML wird mit den Werten aus dem JSON ersetzt:
-        document.getElementById('question').innerHTML = question['question'];
-        document.getElementById('answer_1').innerHTML = question['answer_1'];
-        document.getElementById('answer_2').innerHTML = question['answer_2'];
-        document.getElementById('answer_3').innerHTML = question['answer_3'];
-        document.getElementById('answer_4').innerHTML = question['answer_4'];
-    } else { // verhindert, dass das Spiel nach der letzten Frage weitergeht (Spielscreen wird ausgeblendet, Endscreen wird angezeigt)
-        document.getElementById('end-screen').style = ''; // display: none wird entfernt = der Endscreen wird angezeigt
-        document.getElementById('play-screen').style = 'display: none';
-        document.getElementById('all-questions').innerHTML = questions.length;
-        document.getElementById('amount-of-right-questions').innerHTML = rightQuestions;
-        document.getElementById('header-img').src = './img/epicgamer.jpg';
-        // Fortschrittsbar wird am Ende auf 100% Breite gesetzt:
-        document.getElementById('progress-bar').innerHTML = '100 %';
-        document.getElementById('progress-bar').style.width = '100%';
+
+function showQuestion() {
+    if (gameIsOver()) {
+        showEndScreen();
+    } else {
+        updateProgressBar();
+        updateToNextQuestion();
     }
 }
 
 
-function answer(selection) {
-    let question = questions[currentQuestion]; // s. Funktion zuvor
-    let selectedAnswerNumber = selection.slice(-1); // vom jeweiligen Parameter wird die letzte Stelle "abgeschnitten" und ausgegeben - in diesem Fall immer die jeweilige Zahl (answer_1/2/3 usw.) - und das packen wir in die Variable "selectedAnswerNumber"
-    let idOfRightAnswer = `answer_${question['right_answer']}`; // wir holen uns die id der richtigen Antwort und machen diese dynamisch, damit immer auf die jeweils richtige Antwort zugegriffen wird - in diesem Fall '3'
+// START: belongs to showQuestion()
+function gameIsOver() {
+    return currentQuestion >= questions.length;
+}
 
-    if (selectedAnswerNumber == question['right_answer']) { // jetzt können wir vergleichen, ob der angeklickte Parameter (die Antwort) mit der Stelle aus dem JSON (also die richtige Antwort) übereinstimmt
-        document.getElementById(selection).parentNode.classList.add('bg-success'); // als ID können wir hier "selection" nehmen, da diese Variable genauso heißt, wie unsere ID (in diesem Fall answer_3) / mit "parentNode" greifen wir auf den übergeordneten Container zu und fügen die Klasse dort hinzu.
-        rightQuestions++; // Anzahl richtiger Fragen wird immer um 1 erhöht
-    } else { // wenn die angeklickte Antwort nicht korrekt ist, soll die richtige Antwort zusammen mit der angeklickten (falschen) angezeigt werden
-        document.getElementById(selection).parentNode.classList.add('bg-danger');
-        document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
+
+function showEndScreen() {
+    document.getElementById('end-screen').style = '';
+    document.getElementById('play-screen').style = 'display: none';
+    document.getElementById('all-questions').innerHTML = questions.length;
+    document.getElementById('amount-of-right-questions').innerHTML = rightQuestions;
+    document.getElementById('header-img').src = './img/endscreen.jpg';
+    // sets progress-bar to 100%:
+    document.getElementById('progress-bar').innerHTML = '100 %';
+    document.getElementById('progress-bar').style.width = '100%';
+}
+
+
+function updateProgressBar() {
+    let percent = currentQuestion / questions.length;
+    percent = Math.round(percent * 100);
+    document.getElementById('progress-bar').innerHTML = `${percent} %`;
+    document.getElementById('progress-bar').style.width = `${percent}%`;
+}
+
+
+function updateToNextQuestion() {
+    let question = questions[currentQuestion];
+    document.getElementById('current-question').innerHTML = currentQuestion + 1;
+    // replaces static code with JSON-Elements:
+    document.getElementById('question').innerHTML = question['question'];
+    document.getElementById('answer_1').innerHTML = question['answer_1'];
+    document.getElementById('answer_2').innerHTML = question['answer_2'];
+    document.getElementById('answer_3').innerHTML = question['answer_3'];
+    document.getElementById('answer_4').innerHTML = question['answer_4'];
+}
+// END: belongs to showQuestion()
+
+
+function answer(selection) {
+    if (answerSelected) {
+        return;
     }
-    document.getElementById('next-button').disabled = false; // der Button wird aktiviert (anklickbar)
+    // function stops here if an answer has already been selected
+    answerSelected = true;
+
+    let question = questions[currentQuestion];
+    let selectedAnswerNumber = selection.slice(-1);
+    let idOfRightAnswer = `answer_${question['right_answer']}`;
+
+    if (rightAnswerSelected(selectedAnswerNumber, question)) {
+        success(selection);
+    } else {
+        failure(selection, idOfRightAnswer);
+    }
+    document.getElementById('next-button').disabled = false;
+}
+
+
+function rightAnswerSelected(selectedAnswerNumber, question) {
+    return selectedAnswerNumber == question['right_answer'];
+}
+
+
+function success(selection) {
+    document.getElementById(selection).parentNode.style.backgroundColor = '#5FEB08';
+    AUDIO_SUCCESS.play();
+    rightQuestions++;
+}
+
+
+function failure(selection, idOfRightAnswer) {
+    document.getElementById(selection).parentNode.style.backgroundColor = '#FF1749';
+    document.getElementById(idOfRightAnswer).parentNode.style.backgroundColor = '#5FEB08';
+    AUDIO_FAILURE.play();
 }
 
 
 function nextQuestion() {
-    currentQuestion++; // Variable wird immer um 1 erhöht -> z. B. von 0 auf 1 im JSON Array und es wird die nächste Frage angezeigt
-    document.getElementById('next-button').disabled = true; // der Button wird deaktiviert
+    answerSelected = false; // reactives answer buttons
+    currentQuestion++;
+    document.getElementById('next-button').disabled = true;
     resetAnswerButtons();
-    showQuestion(); // nächste Frage wird geladen
+    showQuestion();
 }
 
 
-function resetAnswerButtons() { // die Hintergrundfarbe (grün o. rot o. beides) der Antworten wird entfernt
-    document.getElementById('answer_1').parentNode.classList.remove('bg-danger');
-    document.getElementById('answer_1').parentNode.classList.remove('bg-success');
-    document.getElementById('answer_2').parentNode.classList.remove('bg-danger');
-    document.getElementById('answer_2').parentNode.classList.remove('bg-success');
-    document.getElementById('answer_3').parentNode.classList.remove('bg-danger');
-    document.getElementById('answer_3').parentNode.classList.remove('bg-success');
-    document.getElementById('answer_4').parentNode.classList.remove('bg-danger');
-    document.getElementById('answer_4').parentNode.classList.remove('bg-success');
+function resetAnswerButtons() { // removes background-colors
+    document.getElementById('answer_1').parentNode.style = '';
+    document.getElementById('answer_2').parentNode.style = '';
+    document.getElementById('answer_3').parentNode.style = '';
+    document.getElementById('answer_4').parentNode.style = '';
 }
 
 
 function restartGame() {
-    document.getElementById('header-img').src = './img/playscreen1.jpg';
+    document.getElementById('header-img').src = './img/startscreen.jpg';
     document.getElementById('end-screen').style = 'display: none';
-    document.getElementById('play-screen').style = '';
+    document.getElementById('start-screen').style = '';
+    document.getElementById('progress').style = 'display: none;';
     rightQuestions = 0;
     currentQuestion = 0;
     init();

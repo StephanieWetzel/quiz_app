@@ -2,7 +2,9 @@ body {
     background-image: url(./img/keyboard.jpg);
     background-size: cover;
     background-position: center;
-    background-color: black !important;
+    font-family: 'Black Ops One' !important;
+    font-size: 20px !important;
+    font-weight: 300 !important;
 }
 
 .container {
@@ -14,6 +16,16 @@ body {
 
 .quiz-card {
     width: 30rem;
+    border-color: #B31E68 !important;
+    border-width: 6px !important;
+    border-radius: 12px !important;
+    box-shadow: rgba(240, 46, 170, 0.4) 0px 5px, rgba(240, 46, 170, 0.3) 0px 10px, rgba(240, 46, 170, 0.2) 0px 15px, rgba(240, 46, 170, 0.1) 0px 20px, rgba(240, 46, 170, 0.05) 0px 25px;
+}
+
+.progress-bar {
+    background-color: #00FFFF !important;
+    color: #F81039 !important;
+    font-size: 14px;
 }
 
 .question-footer {
@@ -21,30 +33,35 @@ body {
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid rgba(0, 0, 0, 0.4);
+    border-color: #B31E68;
     padding-top: 16px;
+}
+
+.card {
+    border-color: #B31E68 !important;
+    color: black !important;
 }
 
 .card-bg:hover {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-.bg-success,
-.bg-danger {
-    color: white !important;
+    background-color: #fff2f8;
 }
 
 .text-center {
     text-align: center;
 }
 
-.final-headline {
-    font-size: 32px;
-    margin-bottom: 16px
-}
-
-.restart-button {
+.my-button {
     display: flex;
     justify-content: center;
-    margin-top: 24px;
+    margin: 24px 0 16px 0;
+}
+
+.btn {
+    background-color: #B31E68 !important;
+    color: white !important
+}
+
+.btn:hover {
+    background-color: #cd3d85 !important;
 }
